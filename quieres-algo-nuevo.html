@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>¿Quieres probar algo nuevo? 🌸</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --rosa:#F2A7C3;--amarillo:#F7E07A;--morado:#D4C5F0;
+  --tinta:#2D1A26;--gris:#9A8F95;--papel:#FEF9F5;
+}
+html, body {
+  width: 100%; height: 100%;
+  font-family: 'DM Sans', sans-serif;
+  background: var(--papel);
+  overflow: hidden;
+  touch-action: none;
+}
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
+  position: relative;
+}
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 15% 20%, rgba(242,167,195,.2) 0%, transparent 60%),
+    radial-gradient(ellipse 55% 55% at 85% 80%, rgba(212,197,240,.22) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 40% at 50% 50%, rgba(247,224,122,.1) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* ── PANTALLA 1 ── */
+#screen-pregunta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem 1.5rem;
+  position: relative;
+  z-index: 10;
+  animation: fadeIn .6s ease;
+  max-width: 420px;
+  width: 100%;
+}
+@keyframes fadeIn { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
+
+.chip {
+  font-size: 10px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--gris);
+  font-weight: 500;
+  margin-bottom: 1.25rem;
+}
+h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(30px, 9vw, 54px);
+  font-weight: 400;
+  color: var(--tinta);
+  line-height: 1.2;
+  margin-bottom: .4rem;
+}
+h1 em { font-style: italic; color: var(--rosa); }
+.subtitulo {
+  font-size: 13px;
+  color: var(--gris);
+  margin-bottom: 2.5rem;
+  font-weight: 300;
+}
+
+/* BOTÓN SÍ */
+.btn-si {
+  padding: 16px 48px;
+  border-radius: 99px;
+  border: none;
+  background: linear-gradient(135deg, var(--rosa), #F0C0D8);
+  color: var(--tinta);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 17px;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: 0 6px 24px rgba(242,167,195,.45);
+  animation: siPulse 2s ease-in-out infinite;
+  -webkit-tap-highlight-color: transparent;
+  position: relative;
+  z-index: 20;
+}
+.btn-si:active { transform: scale(.96); }
+@keyframes siPulse {
+  0%,100% { box-shadow: 0 6px 24px rgba(242,167,195,.35); }
+  50%      { box-shadow: 0 8px 36px rgba(242,167,195,.75), 0 0 0 10px rgba(242,167,195,.1); }
+}
+
+/* BOTÓN NO — flotante, huye */
+.btn-no {
+  position: fixed;
+  padding: 11px 24px;
+  border-radius: 99px;
+  border: 1.5px solid #CCC;
+  background: white;
+  color: var(--gris);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  cursor: pointer;
+  z-index: 15;
+  transition: left .18s ease, top .18s ease;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  pointer-events: none; /* no se puede tocar */
+}
+
+/* ── PARTÍCULAS ── */
+.particula {
+  position: fixed;
+  pointer-events: none;
+  z-index: 5;
+  animation: flotar linear forwards;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+@keyframes flotar {
+  0%   { opacity:0; transform:translateY(0) scale(.5) rotate(0deg); }
+  12%  { opacity:1; }
+  88%  { opacity:1; }
+  100% { opacity:0; transform:translateY(-130px) scale(1.15) rotate(var(--spin)); }
+}
+
+/* ── PANTALLA 2 ── */
+#screen-mensaje {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2.5rem 1.75rem;
+  position: relative;
+  z-index: 10;
+  max-width: 420px;
+  width: 100%;
+  animation: fadeIn .7s ease;
+}
+#screen-mensaje.show { display: flex; }
+
+.emoji-grande {
+  font-size: 52px;
+  margin-bottom: 1.5rem;
+  animation: bounce 1.8s ease-in-out infinite;
+}
+@keyframes bounce {
+  0%,100% { transform:translateY(0); }
+  50%      { transform:translateY(-10px); }
+}
+#screen-mensaje h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(26px, 7vw, 44px);
+  font-weight: 400;
+  color: var(--tinta);
+  line-height: 1.25;
+  margin-bottom: 1rem;
+}
+#screen-mensaje h2 em { color: var(--rosa); font-style: italic; }
+#screen-mensaje p {
+  font-size: 15px;
+  color: var(--gris);
+  line-height: 1.8;
+  margin-bottom: 2rem;
+  font-weight: 300;
+}
+.corazon-deco { display:flex; gap:10px; font-size:20px; opacity:.75; }
+</style>
+</head>
+<body>
+
+<!-- PANTALLA 1 -->
+<div id="screen-pregunta">
+  <p class="chip">✦ una preguntita</p>
+  <h1>¿Quieres probar<br>algo <em>nuevo</em> hoy?</h1>
+  <p class="subtitulo">Solo di que sí ✨</p>
+  <button class="btn-si" id="btn-si">Sí 🌸</button>
+</div>
+
+<!-- BOTÓN NO — flota sobre todo -->
+<button class="btn-no" id="btn-no">No</button>
+
+<!-- PANTALLA 2 -->
+<div id="screen-mensaje">
+  <div class="emoji-grande">🫦✨</div>
+  <h2>Te veo fuera<br>de tu <em>trabajo</em></h2>
+  <p>Espero verte pronto —<br>y con esos ojitos<br>que tanto me encantan 🥺</p>
+  <div class="corazon-deco">💛 🌸 💛 🌸 💛</div>
+</div>
+
+<script>
+const EMOJIS = ['🌼','💛','🌸','✨','💐','🌻','💕','🌷','⭐','🫧','🌼','💛'];
+
+// ── POSICIÓN INICIAL DEL BOTÓN NO ──
+const btnNo = document.getElementById('btn-no');
+let noX = 55, noY = 72; // % del viewport
+function posicionarNo() {
+  btnNo.style.left = noX + 'vw';
+  btnNo.style.top  = noY + 'vh';
+}
+posicionarNo();
+
+// ── HUIR DEL CURSOR (desktop) ──
+document.addEventListener('mousemove', (e) => {
+  const rect = btnNo.getBoundingClientRect();
+  const cx = rect.left + rect.width / 2;
+  const cy = rect.top  + rect.height / 2;
+  const dx = e.clientX - cx;
+  const dy = e.clientY - cy;
+  const dist = Math.sqrt(dx * dx + dy * dy);
+  if (dist < 140) {
+    const angle = Math.atan2(dy, dx);
+    const fuerza = Math.min(10, 900 / dist);
+    noX -= Math.cos(angle) * fuerza * .7;
+    noY -= Math.sin(angle) * fuerza * .7;
+    noX = Math.max(4, Math.min(88, noX));
+    noY = Math.max(8, Math.min(88, noY));
+    posicionarNo();
+  }
+});
+
+// ── HUIR DEL TOQUE (mobile) ──
+document.addEventListener('touchmove', (e) => {
+  const touch = e.touches[0];
+  const rect = btnNo.getBoundingClientRect();
+  const cx = rect.left + rect.width / 2;
+  const cy = rect.top  + rect.height / 2;
+  const dx = touch.clientX - cx;
+  const dy = touch.clientY - cy;
+  const dist = Math.sqrt(dx * dx + dy * dy);
+  if (dist < 120) {
+    const angle = Math.atan2(dy, dx);
+    const fuerza = Math.min(12, 700 / dist);
+    noX -= Math.cos(angle) * fuerza * .8;
+    noY -= Math.sin(angle) * fuerza * .8;
+    noX = Math.max(4, Math.min(85, noX));
+    noY = Math.max(8, Math.min(88, noY));
+    posicionarNo();
+  }
+}, { passive: true });
+
+// ── BOTÓN SÍ ──
+document.getElementById('btn-si').addEventListener('click', () => {
+  lanzarFlores(55);
+  setTimeout(() => {
+    document.getElementById('screen-pregunta').style.display = 'none';
+    btnNo.style.display = 'none';
+    document.getElementById('screen-mensaje').classList.add('show');
+    lanzarFlores(45);
+  }, 500);
+});
+
+// ── FLORES ──
+function lanzarFlores(n) {
+  for (let i = 0; i < n; i++) {
+    setTimeout(() => {
+      const p = document.createElement('div');
+      p.className = 'particula';
+      p.textContent = EMOJIS[Math.floor(Math.random() * EMOJIS.length)];
+      p.style.left = (Math.random() * 96) + 'vw';
+      p.style.top  = (55 + Math.random() * 40) + 'vh';
+      p.style.fontSize = (13 + Math.random() * 14) + 'px';
+      p.style.setProperty('--spin', (Math.random() * 70 - 35) + 'deg');
+      const dur = 1.3 + Math.random() * 1.1;
+      p.style.animationDuration = dur + 's';
+      document.body.appendChild(p);
+      setTimeout(() => p.remove(), dur * 1000 + 100);
+    }, i * 25);
+  }
+}
+
+// Flores continuas en pantalla 2
+setInterval(() => {
+  if (document.getElementById('screen-mensaje').classList.contains('show')) {
+    lanzarFlores(5);
+  }
+}, 2000);
+</script>
+</body>
+</html>
